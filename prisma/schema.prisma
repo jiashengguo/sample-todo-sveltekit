@@ -4,24 +4,18 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 datasource db {
-    provider = "postgresql"
-    url = env("DATABASE_URL")
-    directUrl = env("DATABASE_DIRECT_URL")
+    provider = "sqlite"
+    url = "file:./dev.db"
 }
 
 generator client {
     provider = "prisma-client-js"
 }
 
-enum SpaceUserRole {
-    USER
-    ADMIN
-}
-
 /// @@deny('all', auth() == null)
 /// @@allow('create', true)
 /// @@allow('read', members ? [user == auth()])
-/// @@allow('update,delete', members ? [user == auth() && role == ADMIN])
+/// @@allow('update,delete', members ? [user == auth() && role == 'ADMIN'])
 model Space {
     id String @id() @default(uuid())
     createdAt DateTime @default(now())
@@ -35,7 +29,7 @@ model Space {
 }
 
 /// @@deny('all', auth() == null)
-/// @@allow('create,update,delete', space.members ? [user == auth() && role == ADMIN])
+/// @@allow('create,update,delete', space.members ? [user == auth() && role == 'ADMIN'])
 /// @@allow('read', space.members ? [user == auth()])
 model SpaceUser {
     id String @id() @default(uuid())
@@ -45,7 +39,7 @@ model SpaceUser {
     spaceId String
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String
-    role SpaceUserRole
+    role String @default("USER")
 
     @@unique([userId, spaceId])
 }

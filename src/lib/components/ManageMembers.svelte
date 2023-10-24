@@ -1,25 +1,20 @@
 <script lang="ts">
-    import { invalidateAll } from '$app/navigation';
-    import { useCreateSpaceUser, useDeleteSpaceUser } from '$lib/hooks';
-    import {
-        SpaceUserRole,
-        type Space,
-        type SpaceUser,
-        type User,
-    } from '@prisma/client';
-    import { Plus, Trash } from '@steeze-ui/heroicons';
-    import { Icon } from '@steeze-ui/svelte-icon';
-    import { getContext } from 'svelte';
-    import Avatar from './Avatar.svelte';
+    import { invalidateAll } from "$app/navigation";
+    import { useCreateSpaceUser, useDeleteSpaceUser } from "$lib/hooks";
+    import { type Space, type SpaceUser, type User } from "@prisma/client";
+    import { Plus, Trash } from "@steeze-ui/heroicons";
+    import { Icon } from "@steeze-ui/svelte-icon";
+    import { getContext } from "svelte";
+    import Avatar from "./Avatar.svelte";
 
     export let space: Space;
     export let members: (SpaceUser & { user: User })[];
 
-    let role = SpaceUserRole.USER;
-    let email = '';
+    let role = "USER";
+    let email = "";
     let form: HTMLFormElement;
 
-    const me = getContext<{ id: string }>('currentUser');
+    const me = getContext<{ id: string }>("currentUser");
     const addMember = useCreateSpaceUser();
     const delMember = useDeleteSpaceUser();
 
@@ -51,10 +46,10 @@
     }
 
     function formatError(err: any) {
-        if (err?.info?.code === 'P2002') {
-            return 'User is already a member of this space';
-        } else if (err?.info?.code === 'P2025') {
-            return 'User not found';
+        if (err?.info?.code === "P2002") {
+            return "User is already a member of this space";
+        } else if (err?.info?.code === "P2025") {
+            return "User not found";
         } else {
             return err?.info?.message ?? err?.message;
         }
@@ -66,11 +61,7 @@
 </script>
 
 <div>
-    <form
-        class="flex flex-wrap gap-2 items-center mb-8 w-full"
-        on:submit|preventDefault={onAddMember}
-        bind:this={form}
-    >
+    <form class="flex flex-wrap gap-2 items-center mb-8 w-full" on:submit|preventDefault={onAddMember} bind:this={form}>
         <input
             type="email"
             bind:value={email}
@@ -80,8 +71,8 @@
         />
 
         <select class="select select-sm mr-2" name="role" bind:value={role}>
-            <option value={SpaceUserRole.USER}>USER</option>
-            <option value={SpaceUserRole.ADMIN}>ADMIN</option>
+            <option value={"USER"}>USER</option>
+            <option value={"ADMIN"}>ADMIN</option>
         </select>
 
         <button type="submit">
@@ -104,10 +95,7 @@
                 <div class="flex items-center">
                     {#if me?.id !== member.user.id}
                         <button on:click={() => onRemoveMember(member.id)}
-                            ><Icon
-                                src={Trash}
-                                class="w-4 h-4 text-gray-500"
-                            /></button
+                            ><Icon src={Trash} class="w-4 h-4 text-gray-500" /></button
                         >
                     {/if}
                 </div>
