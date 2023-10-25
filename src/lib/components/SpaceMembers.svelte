@@ -17,7 +17,7 @@
     <div class="flex items-center">
         <label class="mr-1 modal-button cursor-pointer" for="management-modal">
             {#each members as member (member.id)}
-                <Avatar size={32} />
+                <Avatar size={32} email={member.user.email} />
             {/each}
         </label>
     </div>

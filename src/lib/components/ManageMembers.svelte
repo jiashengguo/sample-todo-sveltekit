@@ -85,7 +85,7 @@
             <li class="flex flex-wrap w-full justify-between">
                 <div class="flex items-center">
                     <div class="hidden md:block mr-2">
-                        <Avatar size={32} />
+                        <Avatar size={32} email={member.user.email} />
                     </div>
                     <p class="w-36 md:w-48 line-clamp-1 mr-2">
                         {member.user.name || member.user.email}
